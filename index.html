@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUNCE · sunce.eu.cc</title>
+<meta name="description" content="SUNCE 的网络门牌：博客、作品与日常小工具的入口。">
+<link rel="icon" href="avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky: #8ED0FF;
+    --sky-deep: #6FBFFF;
+    --grass: #5D8A3A;
+    --grass-light: #7CB350;
+    --grass-vivid: #44BD32;
+    --dirt: #8A5A2B;
+    --gold: #FCEE4B;
+    --diamond: #5DEFEA;
+    --emerald: #3DCC4A;
+    --paper: #FFFDF4;
+    --ink: #2B2118;
+    --muted: #6B5D43;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--sky);
+    color: var(--ink);
+    font-family: "Pixelify Sans", "Courier New", monospace;
+    -webkit-font-smoothing: none;
+    font-smooth: never;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 16px 40px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  /* flat pixel clouds */
+  .cloud { position: fixed; background: #fff; box-shadow: 6px 6px 0 rgba(0,0,0,0.12); z-index: 0; }
+  .cloud::before, .cloud::after { content: ""; position: absolute; background: #fff; }
+  .c1 { width: 96px; height: 24px; top: 64px; left: 6%; }
+  .c1::before { width: 48px; height: 24px; top: -24px; left: 24px; }
+  .c2 { width: 128px; height: 24px; top: 160px; right: 4%; }
+  .c2::before { width: 64px; height: 24px; top: -24px; left: 32px; }
+  .c3 { width: 80px; height: 16px; top: 300px; left: 2%; }
+  main { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
+  .avatar {
+    width: 152px; height: 152px;
+    image-rendering: pixelated;
+    background: #fff;
+    border-top: 4px solid #E8E8E8;
+    border-left: 4px solid #E8E8E8;
+    border-bottom: 4px solid #8a8a8a;
+    border-right: 4px solid #8a8a8a;
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.35);
+  }
+  h1 {
+    font-family: "Press Start 2P", monospace;
+    font-size: 32px;
+    color: #fff;
+    margin-top: 32px;
+    text-shadow: 4px 4px 0 #3F3F3F;
+    letter-spacing: 2px;
+  }
+  .tagline {
+    margin-top: 16px;
+    font-size: 15px;
+    color: #fff;
+    background: var(--grass-vivid);
+    padding: 4px 12px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.35);
+  }
+  .grid {
+    margin-top: 40px;
+    width: 100%;
+    max-width: 576px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 512px) { .grid { grid-template-columns: 1fr; } }
+  a.card, div.card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--paper);
+    border-top: 4px solid #FFFFFF;
+    border-left: 4px solid #FFFFFF;
+    border-bottom: 4px solid #B8A888;
+    border-right: 4px solid #B8A888;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.35);
+    padding: 16px;
+    height: 100%;
+    transition: filter 120ms steps(4, end), transform 120ms steps(4, end);
+  }
+  a.card:hover { filter: brightness(1.06); }
+  a.card:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+    border-top-color: #B8A888;
+    border-left-color: #B8A888;
+    border-bottom-color: #FFFFFF;
+    border-right-color: #FFFFFF;
+  }
+  .card .k {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--grass-vivid);
+    padding: 2px 8px;
+    margin-bottom: 12px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+  }
+  .card h2 { font-size: 18px; font-weight: 700; color: var(--ink); min-height: 29px; }
+  .card p { margin-top: 8px; font-size: 14px; color: var(--muted); min-height: 45px; }
+  .card.off .soon { color: #B07D10; }
+  .card .soon { color: #C78A00; font-size: 13px; font-weight: 700; margin-top: 8px; display: block; }
+  /* ground strip */
+  .ground {
+    position: fixed; left: 0; right: 0; bottom: 0; height: 32px; z-index: 0;
+    background: var(--dirt);
+    border-top: 10px solid var(--grass-light);
+  }
+  footer {
+    margin-top: 48px;
+    margin-bottom: 32px;
+    font-size: 12px;
+    color: #fff;
+    font-family: "Press Start 2P", monospace;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+  }
+</style>
+</head>
+<body>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <main>
+    <img class="avatar" src="avatar.png" alt="SUNCE 的向导">
+    <h1>SUNCE</h1>
+    <p class="tagline">sunce.eu.cc · 我的网络门牌</p>
+
+    <div class="grid">
+      <div class="card off">
+        <span class="k">博客</span>
+        <h2>个人博客</h2>
+        <p>猪猪侠翻唱作品集与折腾记录，慢慢往里搬。</p>
+        <span class="soon">■ 即将上线</span>
+      </div>
+
+      <a class="card" href="https://p4jnrp15-express-clock-in.apps-2.websson.cloud/">
+        <span class="k">打卡</span>
+        <h2>该上班了，牛马</h2>
+        <p>每日上班打卡页，先打卡，再续命。</p>
+      </a>
+
+      <a class="card" href="https://www.instagram.com/omnisunce/">
+        <span class="k">影像</span>
+        <h2>Instagram</h2>
+        <p>猪猪侠 AI 翻唱作品，《Melody》已发布。</p>
+      </a>
+
+      <a class="card" href="mailto:hi@sunce.eu.cc">
+        <span class="k">邮箱</span>
+        <h2>给我写信</h2>
+        <p>hi@sunce.eu.cc，这个域名的任意别名都能收到。</p>
+      </a>
+    </div>
+
+    <footer>© 2026 SUNCE</footer>
+  </main>
+  <div class="ground"></div>
+</body>
+</html>
